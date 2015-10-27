@@ -2,9 +2,10 @@ import csv
 import json
 import os
 
-from acquire.reader import Reader
-from decorators import cached_property
 from pathlib import Path
+
+from core.acquire import Reader
+from decorators import cached_property
 
 
 class CountryCodes(object):

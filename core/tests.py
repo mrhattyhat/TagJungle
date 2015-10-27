@@ -1,6 +1,6 @@
 import constants
 
-from acquire.wikiwrapper import WikiWrapper
+from core.acquire import WikiWrapper
 
 class TestEntityAnalyzer:
 

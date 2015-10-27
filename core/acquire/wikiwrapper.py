@@ -1,10 +1,11 @@
-import django
 import os
+
+import django
 import wikipedia
 
 django.setup()
 
-from analysis import EntityAnalyzer
+from core.analysis import EntityAnalyzer
 from bs4 import BeautifulSoup
 from core.models import *
 from datetime import datetime

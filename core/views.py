@@ -1,6 +1,6 @@
 from django.shortcuts import render_to_response
 
-from acquire.wikiwrapper import WikiWrapper
+from core.acquire import WikiWrapper
 
 # Create your views here.
 def search(request):
