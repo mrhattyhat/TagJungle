@@ -1,6 +1,6 @@
 import constants
 
-from core.analysis import BaseAnalyzer
+from core.analysis.base_analyzer import BaseAnalyzer
 from decorators import cached_property
 
 class EntityAnalyzer(BaseAnalyzer):
