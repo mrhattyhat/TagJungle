@@ -5,7 +5,7 @@ import wikipedia
 
 django.setup()
 
-from core.analysis import EntityAnalyzer
+from core.analysis.entity import EntityAnalyzer
 from bs4 import BeautifulSoup
 from core.models import *
 from datetime import datetime
