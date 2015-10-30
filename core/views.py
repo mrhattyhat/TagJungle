@@ -2,6 +2,7 @@ from django.shortcuts import render_to_response
 
 from core.acquire.wikiwrapper import WikiWrapper
 
+
 # Create your views here.
 def search(request):
     phrase = request.GET.get('s', None)
