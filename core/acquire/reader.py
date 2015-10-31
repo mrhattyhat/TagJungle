@@ -1,5 +1,6 @@
 import dryscrape
 import os
+import re
 
 from bs4 import BeautifulSoup
 from urlparse import urlparse
@@ -10,7 +11,9 @@ class Reader(object):
     def __init__(self, uri, soup=True):
         base_path = os.path.join(os.path.dirname(__file__), 'data')
         try:
-            f = open(os.path.join(base_path, uri), 'r')
+            ptn = re.compile('https?://')
+            data_file = os.path.join(base_path, re.sub(ptn, '', uri))
+            f = open(data_file, 'r')
             data = f.read()
             f.close()
         except IOError, e:
@@ -22,7 +25,7 @@ class Reader(object):
             sess.visit(page)
             data = sess.driver.body()
 
-            local_page = '{0}-{1}'.format(parts.netloc, os.path.basename(parts.path))
+            local_page = '{0}-{1}-{2}'.format(parts.netloc, os.path.basename(parts.path), parts.query.replace('=', '-'))
             local_file = os.path.join(base_path, local_page)
 
             with open(local_file, 'w') as data_file:

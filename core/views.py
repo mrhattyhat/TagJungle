@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 
 from core.acquire import WikiWrapper, Reader
 from core.analyze import PhoneNumber
@@ -15,20 +15,23 @@ def search(request):
         for res in ent_analyzer.pos_normalized['adjectives']:
             adj.append(res[0])
         context['adjectives'] = adj
-        return render_to_response('search_form.tpl', context=context)
+        return render(request, 'search_form.tpl', context=context)
     else:
-        return render_to_response('search_form.tpl')
+        return render(request, 'search_form.tpl')
+
 
 def phone_number(request):
     context = None
     url = request.POST.get('url')
 
     if url:
+        if not url.startswith('http'):
+            url = 'http://{0}'.format(url)
         reader = Reader(url)
-        context = PhoneNumber.extract_numbers(reader.data)
+        numbers = PhoneNumber.extract_numbers(reader.data)
 
-    if context:
-        return render_to_response('phone_search.tpl', context=context)
-    else:
-        return render_to_response('phone_search.tpl')
+        if numbers:
+            context = dict(numbers=numbers)
+
+    return render(request, 'phone_search.tpl', context=context)
 
