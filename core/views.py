@@ -1,6 +1,7 @@
 from django.shortcuts import render_to_response
 
-from core.acquire.wikiwrapper import WikiWrapper
+from core.acquire import WikiWrapper, Reader
+from core.analyze import PhoneNumber
 
 
 # Create your views here.
@@ -17,3 +18,17 @@ def search(request):
         return render_to_response('search_form.tpl', context=context)
     else:
         return render_to_response('search_form.tpl')
+
+def phone_number(request):
+    context = None
+    url = request.POST.get('url')
+
+    if url:
+        reader = Reader(url)
+        context = PhoneNumber.extract_numbers(reader.data)
+
+    if context:
+        return render_to_response('phone_search.tpl', context=context)
+    else:
+        return render_to_response('phone_search.tpl')
+

@@ -32,6 +32,10 @@ class PhoneNumber(object):
     @classmethod
     def extract_numbers(cls, txt):
         ptn = re.compile(cls.number_ptn)
+        numbers = dict()
 
         for m in re.finditer(ptn, txt):
-            print '{0} - {1}'.format(m.start(), cls.parse(m.group(0)))
+            numbers['pos'] = m.start()
+            numbers['number'] = cls.parse(m.group(0))
+
+        return numbers
