@@ -1,6 +1,5 @@
 import dryscrape
 import os
-import re
 
 from bs4 import BeautifulSoup
 from urlparse import urlparse
@@ -9,24 +8,32 @@ from urlparse import urlparse
 class Reader(object):
 
     def __init__(self, uri, soup=True):
-        base_path = os.path.join(os.path.dirname(__file__), 'data')
+        if not uri.startswith('http'):
+            uri = 'http://{0}'.format(uri)
+        data_path = os.path.join(os.path.dirname(__file__), 'data')
+        url_parts = urlparse(uri)
+        local_page = url_parts.netloc
+        page = url_parts.path if url_parts.path else '/'
+        base_url = '{0}://{1}'.format(url_parts.scheme, url_parts.netloc)
+
+        if url_parts.path:
+            local_page += '-' + os.path.basename(url_parts.path)
+
+        if url_parts.query:
+            local_page += '-' + url_parts.query.replace('=', '-')
+            page = '{0}?{1}'.format(page, url_parts.query)
+
         try:
-            ptn = re.compile('https?://')
-            data_file = os.path.join(base_path, re.sub(ptn, '', uri))
-            f = open(data_file, 'r')
+            f = open(os.path.join(data_path, local_page), 'r')
             data = f.read()
             f.close()
         except IOError, e:
-            parts = urlparse(uri)
-            base_url = '{0}://{1}'.format(parts.scheme, parts.netloc)
             sess = dryscrape.Session(base_url=base_url)
             sess.set_attribute('auto_load_images', True)
-            page = parts.path if parts.path else '/'
             sess.visit(page)
             data = sess.driver.body()
 
-            local_page = '{0}-{1}-{2}'.format(parts.netloc, os.path.basename(parts.path), parts.query.replace('=', '-'))
-            local_file = os.path.join(base_path, local_page)
+            local_file = os.path.join(data_path, local_page)
 
             with open(local_file, 'w') as data_file:
                 data_file.write(data.encode('utf-8'))

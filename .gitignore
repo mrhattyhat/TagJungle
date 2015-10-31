@@ -61,4 +61,5 @@ target/
 
 .idea
 local_settings.py
+core/acquire/data/*
 

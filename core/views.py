@@ -25,8 +25,6 @@ def phone_number(request):
     url = request.POST.get('url')
 
     if url:
-        if not url.startswith('http'):
-            url = 'http://{0}'.format(url)
         reader = Reader(url)
         numbers = PhoneNumber.extract_numbers(reader.data)
 
